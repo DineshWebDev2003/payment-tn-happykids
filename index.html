@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fees</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Location and Service Selection -->
+    <div class="container" id="selectionContainer">
+        <h1>Select Your Location and Service</h1>
+        <img src="images/logo.png" alt="logo" style="width: 200px; height: 200px;">
+        <form id="selectionForm">
+            <div>
+                <label for="location">
+                    <i class="fas fa-map-marker-alt"></i> Choose a Location:
+                </label>
+                <select id="location" required>
+                    <option value="" disabled selected>Select Location</option>
+                    <option value="kolathur">Kolathur</option>
+                    <option value="tambaram">Tambaram</option>
+                    <option value="pollachi">Pollachi</option>
+                    <option value="coimbatore">Coimbatore</option>
+                    <option value="tiruppur">Tiruppur</option>
+                </select>
+            </div>
+            <div>
+                <label for="service">
+                    <i class="fas fa-cogs"></i> Choose a Service:
+                </label>
+                <select id="service" required>
+                    <option value="" disabled selected>Select Service</option>
+                    <option value="playschool">Playschool</option>
+                    <option value="toddlerCare">Toddler Care</option>
+                    <option value="dayCare">Day Care</option>
+                </select>
+            </div>
+            <button type="submit">
+                <i class="fas fa-arrow-right"></i> Go to Payment Section
+            </button>
+        </form>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="container" id="paymentContainer" style="display: none;">
+        <h1 id="paymentHeading"></h1>
+        <div class="qr-section">
+            <h3>Scan the QR Code or Use UPI ID</h3>
+            <img id="qrImage" src="" alt="QR Code" style="width: 200px; height: 200px;">
+            <br>
+            <button onclick="downloadQRCode()">
+                <i class="fas fa-download"></i> Download QR Code
+            </button>
+        </div>
+        <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="39059c57-350d-4f4a-a18c-e3e337a1cc25">
+            <div>
+                <label for="branchName">
+                    <i class="fas fa-building"></i> Branch Name
+                </label>
+                <input type="text" id="branchName" name="branchName" readonly>
+            </div>
+            <div>
+                <label for="transactionId">
+                    <i class="fas fa-receipt"></i> Transaction ID
+                </label>
+                <input type="text" id="transactionId" name="transactionId" placeholder="Enter Transaction ID" required>
+            </div>
+            <div>
+                <label for="studentId">
+                    <i class="fas fa-user"></i> Student ID
+                </label>
+                <input type="text" id="studentId" name="studentId" placeholder="Enter Student ID" required>
+            </div>
+            <div>
+                <label for="studentName">
+                    <i class="fas fa-user"></i> Student Name
+                </label>
+                <input type="text" id="studentName" name="studentName" placeholder="Enter Student Name" required>
+            </div>
+            <div>
+                <label for="paymentAmount">
+                    <i class="fas fa-money-bill-wave"></i> Payment Amount
+                </label>
+                <input type="number" id="paymentAmount" name="paymentAmount" placeholder="Enter Payment Amount" required step="0.01">
+            </div>
+            <button type="submit">
+                <i class="fas fa-save"></i> Submit
+            </button>
+            <button type="button" id="whatsappShare">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp (Mandatory)
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('selectionForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const location = document.getElementById('location').value;
+            const service = document.getElementById('service').value;
+
+            if (!location || !service) {
+                alert('Please select both a location and a service.');
+                return;
+            }
+
+            document.getElementById('selectionContainer').style.display = 'none';
+            document.getElementById('paymentContainer').style.display = 'block';
+            document.getElementById('paymentHeading').textContent = `Pay Fees - ${location} - ${service}`;
+            document.getElementById('branchName').value = `${location} - ${service}`;
+            document.getElementById('qrImage').src = `images/${location}-${service}.jpeg`;
+        });
+
+        document.getElementById('whatsappShare').addEventListener('click', async function () {
+            const paymentContainer = document.getElementById('paymentContainer');
+            const mobileNumber = "919087104259";
+            const transactionId = document.getElementById('transactionId').value;
+            const studentId = document.getElementById('studentId').value;
+            const branchName = document.getElementById('branchName').value;
+
+            if (!transactionId || !studentId) {
+                alert('Please fill in all required fields before sharing.');
+                return;
+            }
+
+            try {
+                const canvas = await html2canvas(paymentContainer);
+                const image = canvas.toDataURL('image/png');
+                const message = `Payment Details:\nBranch: ${branchName}\nTransaction ID: ${transactionId}\nStudent ID: ${studentId}`;
+                const whatsappUrl = `https://wa.me/${mobileNumber}?text=${encodeURIComponent(message)}&image=${encodeURIComponent(image)}`;
+                window.open(whatsappUrl, '_blank');
+            } catch (error) {
+                console.error('Error sharing via WhatsApp:', error);
+            }
+        });
+
+        function downloadQRCode() {
+            const qrImage = document.getElementById('qrImage');
+            const link = document.createElement('a');
+            link.href = qrImage.src;
+            link.download = `${document.getElementById('branchName').value}-QR.png`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
+
+

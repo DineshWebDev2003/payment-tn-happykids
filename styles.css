@@ -1,0 +1,108 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(images/bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 10px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 100%;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-sizing: border-box;
+}
+
+/* Form and Buttons */
+form {
+    margin-top: 20px;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, margin 0.3s;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    margin: 10px 0;
+}
+
+button i {
+    margin-right: 8px;
+}
+
+/* QR Section */
+.qr-section {
+    margin: 20px 0;
+}
+
+.qr-section img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+}
+
+.qr-section button {
+    background-color: #4CAF50;
+}
+#qrImage {
+    animation: bounce 2s infinite;
+   
+    border: 3px solid black;
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@media (min-width: 600px) {
+    .container {
+        max-width: 400px;
+    }
+}
+
